@@ -10,6 +10,10 @@ const ImageSchema = mongoose.Schema({
     data: Buffer, // Dữ liệu của hình ảnh (được lưu dưới dạng Buffer)
     contentType: String, // Loại nội dung của hình ảnh (ví dụ: "image/png")
   },
+  shareable: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // Tạo Mongoose Model sử dụng Schema đã định nghĩa

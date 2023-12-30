@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thư viện ảnh</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      li {
+        position: relative; /* Tạo không gian tương đối cho việc đặt các nút */
+        margin: 10px;
+        padding: 15px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #fff;
+        border-radius: 8px;
+        text-align: center;
+        transition: transform 0.3s ease-in-out;
+        width: 300px;
+      }
+
+      li:hover {
+        transform: scale(1.05);
+      }
+
+      h3 {
+        margin-bottom: 10px;
+        color: #333;
+      }
+
+      img {
+        width: 100%;
+        height: 300px;
+        border-radius: 8px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 8px;
+        transition: opacity 0.3s ease-in-out;
+      }
+
+      .overlay:hover {
+        opacity: 1;
+      }
+
+      .overlay button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 0 5px;
+        transition: background-color 0.3s ease-in-out;
+      }
+
+      .overlay button:hover {
+        background-color: #45a049;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 style="color: #4caf50">THƯ VIỆN CỦA BẠN</h1>
+
+    <ul>
+      <% images.forEach(function(image) { %>
+        <li>
+          <h3><%= image.name %></h3>
+          <img src="/uploads/<%= image.image.data %>" alt="<%= image.name %>" />
+          <div class="overlay">
+            <form action="/images/<%= image._id %>/share" method="post">
+              <button type="submit" style="background-color: blue">Chia sẻ</button>
+            </form>
+            <button style="background-color: red" onclick="confirmDelete('<%= image._id %>')">Xóa</button>
+            <a href="/download/<%= image._id %>"><button>Tải về</button></a>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+
+    <button id="homeButton">Trang chủ</button>
+
+    <script>
+      //Xác nhận xóa ảnh
+      function confirmDelete(imageId) {
+        if (confirm("Bạn có chắc muốn xóa ảnh không?")) {
+          window.location.href = "/delete/" + imageId;
+        }
+      }
+      // Xử lý sự kiện khi button được nhấn
+      document
+        .getElementById("homeButton")
+        .addEventListener("click", function () {
+          window.location.href = "/";
+        });
+    </script>
+  </body>
+</html>

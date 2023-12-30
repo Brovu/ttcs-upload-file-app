@@ -1,27 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
-</head>
-<body>
-    <h1>File Upload</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tải lên hình ảnh của bạn</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f4;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      form {
+        max-width: 400px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      label {
+        display: block;
+        margin-bottom: 8px;
+        color: #555;
+      }
+
+      input[type="text"],
+      input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 16px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tải lên ảnh của bạn</h1>
+    <button id="gallery">Danh sách ảnh đã tải</button>
 
     <!-- Form để tải lên hình ảnh -->
-    <form action="/upload" method="post" enctype="multipart/form-data">
-        <!-- Trường nhập tên -->
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" required>
-        <br>
+    <!-- Form để tải lên hình ảnh -->
+    <form
+      action="/upload"
+      method="post"
+      enctype="multipart/form-data"
+      id="uploadForm"
+    >
+      <!-- Trường nhập tên -->
+      <label for="name">Tên:</label>
+      <input type="text" name="name" id="name" required />
 
-        <!-- Trường chọn hình ảnh -->
-        <label for="testImage">Choose an image:</label>
-        <input type="file" name="testImage" id="testImage" accept="image/*" required>
-        <br>
+      <!-- Trường chọn hình ảnh -->
+      <label for="testImage">Chọn một ảnh:</label>
+      <input
+        type="file"
+        name="testImage"
+        id="testImage"
+        accept="image/*"
+        required
+      />
 
-        <!-- Nút submit để tải lên hình ảnh -->
-        <button type="submit">Upload</button>
+      <!-- Thêm ReCAPTCHA -->
+      <div
+        class="g-recaptcha"
+        data-sitekey="6LepxzwpAAAAAHpaNiD4c7O2Y9zRdaKWTYT74I7Y"
+        data-callback="recaptchaCallback"
+      ></div>
+
+      <!-- Nút submit để tải lên hình ảnh -->
+      <button data-callback="onSubmit">Tải lên</button>
     </form>
-</body>
+    <script>
+      var isRecaptchaVerified = false;
+
+      function onSubmit(token) {
+        if (isRecaptchaVerified) {
+          document.getElementById("uploadForm").submit();
+        } else {
+          alert("Vui lòng xác thực robot trước khi gửi!");
+        }
+      }
+
+      // Callback khi Recaptcha được xác thực
+      function recaptchaCallback() {
+        isRecaptchaVerified = true;
+      }
+
+      // Xử lý sự kiện khi button được nhấn
+      document.getElementById("gallery").addEventListener("click", function () {
+        window.location.href = "/images";
+      });
+
+      // Xử lý sự kiện khi biểu mẫu được submit
+      document
+        .getElementById("uploadForm")
+        .addEventListener("submit", function (event) {
+          if (!isRecaptchaVerified) {
+            event.preventDefault(); // Ngăn chặn việc submit nếu Recaptcha chưa được xác thực
+            alert("Vui lòng xác thực robot trước khi gửi!");
+          }
+        });
+    </script>
+  </body>
 </html>
