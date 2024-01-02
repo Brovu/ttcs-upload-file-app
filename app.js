@@ -130,23 +130,6 @@ app.get("/delete/:imageId", async (req, res) => {
   }
 });
 
-//Xử lí chia sẽ ảnh
-app.post("/images/:id/share", async (req, res) => {
-  try {
-    const image = await ImageModel.findById(req.params.id);
-
-    if (!image) {
-      return res.status(404).send("Image not found");
-    }
-
-    // Cập nhật trường shareable thành true
-    image.shareable = true;
-    await image.save();
-  } catch (err) {
-    console.log("Server Error:", err);
-    res.status(500).send("Internal Server Error");
-  }
-});
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
