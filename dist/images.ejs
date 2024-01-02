@@ -110,7 +110,7 @@
   </head>
   <body>
     <h1 style="color: #4caf50">THƯ VIỆN CỦA BẠN</h1>
-
+    <button id="homeButton" style="margin-top: 10px">Trang chủ</button>
     <ul>
       <% images.forEach(function(image) { %>
       <li>
@@ -125,25 +125,40 @@
             Chia sẻ
           </button>
           <button
-            style="background-color: red"
+            class="delete-btn"
             onclick="confirmDelete('<%= image._id %>')"
+            style="background-color: red;"
           >
             Xóa
           </button>
+
           <a href="/download/<%= image._id %>"><button>Tải về</button></a>
         </div>
       </li>
       <% }); %>
     </ul>
 
-    <button id="homeButton">Trang chủ</button>
-
     <script>
-      //Xác nhận xóa ảnh
+      // Xác nhận xóa ảnh sau khi nhập mật khẩu
       function confirmDelete(imageId) {
-        if (confirm("Bạn có chắc muốn xóa ảnh không?")) {
-          window.location.href = "/delete/" + imageId;
+        // Yêu cầu người dùng nhập mật khẩu
+        const password = prompt("Nhập mật khẩu để xác nhận xóa ảnh:");
+
+        // Kiểm tra mật khẩu
+        if (password !== null && password === "anhvudeptrai") {
+          // Nếu mật khẩu đúng, hiển thị hộp thoại xác nhận
+          if (confirm("Bạn có chắc muốn xóa ảnh không?")) {
+            deleteImage(imageId);
+          }
+        } else if (password !== null) {
+          // Nếu mật khẩu sai, hiển thị thông báo
+          alert("Mật khẩu không đúng. Xóa ảnh không được xác nhận.");
         }
+      }
+
+      // Hàm xóa ảnh
+      function deleteImage(imageId) {
+        window.location.href = "/delete/" + imageId;
       }
 
       // Chia sẻ ảnh và hiển thị URL trong hộp thoại cảnh báo
